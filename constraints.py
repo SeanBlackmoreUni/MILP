@@ -116,3 +116,5 @@ def add_constraints(self, model):
     for i in V_prime:
         if (0, i) in E:
             model.addConstr(z_prime[0, i] == D_ij[0, i] * x[0, i])
+
+            hoi
