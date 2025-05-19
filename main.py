@@ -23,7 +23,7 @@ class MILPModel():
         """
         This function reads the datasheet from excel and sets up the parameters
         """
-        df_vertices = pd.read_excel(file_path, sheet_name = 'Vertices')
+        df_vertices = pd.read_excel(file_path, sheet_name = 'Vertices', engine='openpyxl')
         df_arcs = pd.read_excel(file_path, sheet_name = 'Arcs')
         df_other = pd.read_excel(file_path, sheet_name = 'Other')
 
@@ -155,8 +155,18 @@ class MILPModel():
 
         # Compute Vehicle Hours Traveled (VHT)
         VHT = 0
-        for (i, j) in self.data['arcs']:
-            VHT += self.variables['z'][i, j]
+        for (i, j), var in self.variables['x'].items():
+            if var.X > 0.5:
+                T_ij = self.data['arcs'][(i, j)]['time']
+                S_i = self.data['vertices'][i]['S_i'] if i != 0 else 0
+                VHT += T_ij + S_i
+
+        # Compute Vehicle Miles Traveled (VMT)
+        VMT = 0
+        for (i, j), var in self.variables['x'].items():
+            if var.X > 0.5:
+                D_ij = self.data['arcs'][(i, j)]['distance']
+                VMT += D_ij
 
         # Print the results
         print(f"####   The model finished with objective value: {self.model.ObjVal}")
