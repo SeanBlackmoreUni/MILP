@@ -166,7 +166,7 @@ class MILPModel():
 
 
 if __name__ == "__main__":
-    file_path = 'datasheet.xlsx'
+    file_path = 'datasheet_kopie.xlsx'
 
     model = MILPModel()
     model.model_setup(file_path)
