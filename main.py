@@ -72,7 +72,7 @@ class MILPModel():
         # Create decision variables
         for (i, j) in self.data['arcs']:
             # Binary variable: x[i,j] = 1 if arc (i,j) is used
-            print(f'##############{i, j}')
+            # print(f'##############{i, j}')
             self.variables['x'][i, j] = self.model.addVar(
                 vtype=GRB.BINARY,
                 name=f"x_{i}_{j}"
@@ -130,7 +130,7 @@ class MILPModel():
 
         if self.model.Status == GRB.OPTIMAL:
             print("Optimization was successful!")
-            print(f"####   The model finished with objective value: {self.model.ObjVal}")
+            self.analyze_results()
             self.model.write("solution.sol")
             print("Solution written to solution.sol")
         elif self.model.Status == GRB.INFEASIBLE:
@@ -143,9 +143,30 @@ class MILPModel():
         else:
             print(f"Optimization ended with status {self.model.Status}")
 
+    
+    def analyze_results(self):
+        """
+        Method to print the results of the optimized model.
+        """   
+        # Compute the Vehicle Miles Traveled (VMT)
+        VMT = 0
+        for (i, j) in self.data['arcs']:
+            VMT += self.variables['z_prime'][i, j]
+
+        # Compute Vehicle Hours Traveled (VHT)
+        VHT = 0
+        for (i, j) in self.data['arcs']:
+            VHT += self.variables['z'][i, j]
+
+        # Print the results
+        print(f"####   The model finished with objective value: {self.model.ObjVal}")
+        print(f"####   The amount of vehicles used: {self.variables['k']}")
+        print(f"####   VMT: {VMT}")
+        print(f"####   VHT: {VHT}")
+
 
 if __name__ == "__main__":
-    file_path = 'datasheet_kopie.xlsx'
+    file_path = 'datasheet.xlsx'
 
     model = MILPModel()
     model.model_setup(file_path)
