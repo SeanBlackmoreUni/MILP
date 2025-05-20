@@ -23,8 +23,8 @@ class MILPModel():
         """
         This function reads the datasheet from excel and sets up the parameters
         """
-        df_vertices = pd.read_excel(file_path, sheet_name = 'Vertices', engine='openpyxl')
-        df_arcs = pd.read_excel(file_path, sheet_name = 'Arcs')
+        df_vertices = pd.read_excel(file_path, sheet_name = 'NL_vertices', engine='openpyxl')
+        df_arcs = pd.read_excel(file_path, sheet_name = 'NL_arcs')
         df_other = pd.read_excel(file_path, sheet_name = 'Other')
 
         # Set up the data dictionary
@@ -176,7 +176,7 @@ class MILPModel():
 
 
 if __name__ == "__main__":
-    file_path = 'datasheet_kopie.xlsx'
+    file_path = 'datasheet.xlsx'
 
     model = MILPModel()
     model.model_setup(file_path)
