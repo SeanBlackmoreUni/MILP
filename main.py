@@ -19,6 +19,7 @@ class MILPModel():
     def __init__(self):
         self.model = Model()
 
+
     def model_setup(self, file_path):
         """
         This function reads the datasheet from excel and sets up the parameters
@@ -130,14 +131,15 @@ class MILPModel():
 
         if self.model.Status == GRB.OPTIMAL:
             print("Optimization was successful!")
-            self.analyze_results()
             self.model.write("solution.sol")
             print("Solution written to solution.sol")
+            self.status = 1         # Optimal
         elif self.model.Status == GRB.INFEASIBLE:
             print("Model is infeasible")
             self.model.computeIIS()  # Compute the Irreducible Inconsistent Subsystem
             self.model.write("infeasible_model.ilp")  # Write the IIS to a file for debugging
             print("IIS written to infeasible_model.ilp")
+            self.status = 2         # Infeasible
         elif self.model.Status == GRB.UNBOUNDED:
             print("Model is unbounded.")
         else:
@@ -210,3 +212,6 @@ if __name__ == "__main__":
     model.model_setup(file_path)
     model.setup_contraints()
     model.optimize_model()
+
+    if model.Status == GRB.OPTIMAL:
+            model.analyze_results()

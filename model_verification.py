@@ -16,8 +16,10 @@ class ModelVerification():
         self.model.model_setup(filepath)
         self.model.setup_contraints()
     
+
     def run_model(self):
         self.model.optimize_model()
+        self.model.analyze_results()
 
 
 if __name__ == "__main__":
