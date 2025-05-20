@@ -168,11 +168,38 @@ class MILPModel():
                 D_ij = self.data['arcs'][(i, j)]['distance']
                 VMT += D_ij
 
+        # Find the routes per vehicle
+        # Step 1: extract active arcs
+        arcs_used = {(i, j) for (i, j), var in self.variables['x'].items() if var.X > 0.5}
+
+        # Step 2: find starting nodes from depot
+        starts = [j for (i, j) in arcs_used if i == 0]
+
+        routes = {}
+        route_id = 1
+
+        for start in starts:
+            route = [0, start]
+            current = start
+            while current != 0:
+                next_node = next((j for (i, j) in arcs_used if i == current), 0)
+                if next_node == 0:
+                    route.append(0)
+                    break
+                route.append(next_node)
+                current = next_node
+            routes[route_id] = route
+            route_id += 1
+
         # Print the results
         print(f"####   The model finished with objective value: {self.model.ObjVal}")
         print(f"####   The amount of vehicles used: {self.variables['k']}")
         print(f"####   VMT: {VMT}")
         print(f"####   VHT: {VHT}")
+
+        # Print the routes
+        for key, value in routes.items():
+            print(f"####   Route {key}: {value}")
 
 
 if __name__ == "__main__":
