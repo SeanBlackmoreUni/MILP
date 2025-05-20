@@ -201,6 +201,7 @@ class MILPModel():
         for key, value in routes.items():
             print(f"####   Route {key}: {value}")
 
+        return  self.model.ObjVal, self.variables['k'], VMT, VHT
 
 if __name__ == "__main__":
     file_path = 'datasheet.xlsx'
