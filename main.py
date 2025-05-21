@@ -155,13 +155,13 @@ class MILPModel():
         for (i, j) in self.data['arcs']:
             VMT += self.variables['z_prime'][i, j]
 
-        # Compute Vehicle Hours Traveled (VHT)
-        VHT = 0
+        # Compute Vehicle Hours Traveled (VTT)
+        VTT = 0
         for (i, j), var in self.variables['x'].items():
             if var.X > 0.5:
                 T_ij = self.data['arcs'][(i, j)]['time']
                 S_i = self.data['vertices'][i]['S_i'] if i != 0 else 0
-                VHT += T_ij + S_i
+                VTT += T_ij + S_i
 
         # Compute Vehicle Miles Traveled (VMT)
         VMT = 0
@@ -197,13 +197,13 @@ class MILPModel():
         print(f"####   The model finished with objective value: {self.model.ObjVal}")
         print(f"####   The amount of vehicles used: {int(self.variables['k'].X)}")
         print(f"####   VMT: {VMT}")
-        print(f"####   VHT: {VHT}")
+        print(f"####   VTT: {VTT}")
 
         # Print the routes
         for key, value in routes.items():
             print(f"####   Route {key}: {value}")
 
-        return  self.model.ObjVal, int(self.variables['k'].X), VMT, VHT, routes
+        return  self.model.ObjVal, int(self.variables['k'].X), VMT, VTT, routes
 
 if __name__ == "__main__":
     file_path = 'datasheet.xlsx'
