@@ -195,7 +195,7 @@ class MILPModel():
 
         # Print the results
         print(f"####   The model finished with objective value: {self.model.ObjVal}")
-        print(f"####   The amount of vehicles used: {self.variables['k']}")
+        print(f"####   The amount of vehicles used: {int(self.variables['k'].X)}")
         print(f"####   VMT: {VMT}")
         print(f"####   VHT: {VHT}")
 
@@ -203,7 +203,7 @@ class MILPModel():
         for key, value in routes.items():
             print(f"####   Route {key}: {value}")
 
-        return  self.model.ObjVal, self.variables['k'], VMT, VHT
+        return  self.model.ObjVal, int(self.variables['k'].X), VMT, VHT, routes
 
 if __name__ == "__main__":
     file_path = 'datasheet.xlsx'
