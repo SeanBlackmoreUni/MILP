@@ -14,12 +14,12 @@ class SensitivityAnalysis():
     Class that performs the sensitivity analysis.
     """
     def __init__(self):
-        self.filepath = "datasheet_kopie.xlsx"
+        self.filepath = "datasheet.xlsx"
         self.ranges = {
-            'Q': np.arange(0, 40, 5),
-            'T_bar': np.arange(50, 200, 10),
-            'D_bar': np.arange(0, 40, 5),
-            'S_i': np.arange(0, 50, 5)
+            'Q': np.arange[30, 40, 50, 60, 70],
+            'T_bar': np.arange[360, 420, 480, 540, 600],
+            'D_bar': np.arange(240, 265, 290, 315, 340),
+            'S_i': np.arange[]
         }
 
 
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     sens_analysis = SensitivityAnalysis()
 
     # The code for the bar charts
-    parameter_choice = ['Q', 'T_bar', 'D_bar', 'S_i']
+    parameter_choice = ['Q', 'T_bar', 'D_bar']#, 'S_i'
     for param in parameter_choice:   
         sens_analysis.optimize_models(param)      
 
