@@ -171,6 +171,28 @@ class MILPModel():
                 VMT += D_ij
 
         # Find the routes per vehicle
+        # # Step 1: extract active arcs
+        # arcs_used = {(i, j) for (i, j), var in self.variables['x'].items() if var.X > 0.5}
+
+        # # Step 2: find starting nodes from depot
+        # starts = [j for (i, j) in arcs_used if i == 0]
+
+        # routes = {}
+        # route_id = 1
+
+        # for start in starts:
+        #     route = [0, start]
+        #     current = start
+        #     while current != 0:
+        #         next_node = next((j for (i, j) in arcs_used if i == current), 0)
+        #         if next_node == 0:
+        #             route.append(0)
+        #             break
+        #         route.append(next_node)
+        #         current = next_node
+        #     routes[route_id] = route
+        #     route_id += 1
+
         # Step 1: extract active arcs
         arcs_used = {(i, j) for (i, j), var in self.variables['x'].items() if var.X > 0.5}
 
@@ -182,16 +204,27 @@ class MILPModel():
 
         for start in starts:
             route = [0, start]
+            total_time = self.data['arcs'][(0, start)]['time']
+            total_distance = self.data['arcs'][(0, start)]['distance']
+            
             current = start
             while current != 0:
                 next_node = next((j for (i, j) in arcs_used if i == current), 0)
                 if next_node == 0:
                     route.append(0)
+                    total_time += self.data['arcs'][(current, 0)]['time']
+                    total_distance += self.data['arcs'][(current, 0)]['distance']
                     break
                 route.append(next_node)
+                total_time += self.data['arcs'][(current, next_node)]['time']
+                total_distance += self.data['arcs'][(current, next_node)]['distance']
                 current = next_node
+
             routes[route_id] = route
+            print(f"Route {route_id}: {route}")
+            print(f"  Total distance: {total_distance:.2f} miles, Total time: {total_time:.2f} minutes")
             route_id += 1
+
 
         # Print the results
         print(f"####   The model finished with objective value: {self.model.ObjVal}")
@@ -199,9 +232,9 @@ class MILPModel():
         print(f"####   VMT: {VMT}")
         print(f"####   VTT: {VTT}")
 
-        # Print the routes
-        for key, value in routes.items():
-            print(f"####   Route {key}: {value}")
+        # # Print the routes
+        # for key, value in routes.items():
+        #     print(f"####   Route {key}: {value}")
 
         return  self.model.ObjVal, int(self.variables['k'].X), VMT, VTT, routes
 
