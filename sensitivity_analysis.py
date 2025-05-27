@@ -122,10 +122,11 @@ if __name__ == '__main__':
     sens_analysis = SensitivityAnalysis()
 
     # The code for the bar charts
-    # parameter_choice = 'D_bar'    # 'Q', 'T_bar', 'D_bar', 'S_i'
-    # sens_analysis.optimize_models(parameter_choice)      
+    parameter_choice = ['Q', 'T_bar', 'D_bar', 'S_i']
+    for param in parameter_choice:   
+        sens_analysis.optimize_models(param)      
 
     # The code for the contour plots 
-    parameter1 = 'D_bar'           # 'Q', 'T_bar', 'D_bar', 'S_i'
+    parameter1 = 'D_bar'       # 'Q', 'T_bar', 'D_bar', 
     parameter2 = 'Q'           # 'Q', 'T_bar', 'D_bar', 'S_i'
     sens_analysis.cross_vary_models(parameter1, parameter2)
