@@ -207,6 +207,10 @@ class MILPModel():
             total_time = self.data['arcs'][(0, start)]['time']
             total_distance = self.data['arcs'][(0, start)]['distance']
             
+            # Add service time at first customer node
+            total_time += self.data['vertices'][start]['S_i']
+            print(f"for node: {start} service time is: {self.data['vertices'][start]['S_i']}")
+
             current = start
             while current != 0:
                 next_node = next((j for (i, j) in arcs_used if i == current), 0)
@@ -216,14 +220,22 @@ class MILPModel():
                     total_distance += self.data['arcs'][(current, 0)]['distance']
                     break
                 route.append(next_node)
+
+                # Add arc time/distance
                 total_time += self.data['arcs'][(current, next_node)]['time']
                 total_distance += self.data['arcs'][(current, next_node)]['distance']
+
+                # Add service time at next node
+                total_time += self.data['vertices'][next_node]['S_i']
+                print(f"for node: {next_node} service time is: {self.data['vertices'][next_node]['S_i']}")
+
                 current = next_node
 
             routes[route_id] = route
             print(f"Route {route_id}: {route}")
             print(f"  Total distance: {total_distance:.2f} miles, Total time: {total_time:.2f} minutes")
             route_id += 1
+
 
 
         # Print the results
