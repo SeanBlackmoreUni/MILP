@@ -209,7 +209,7 @@ class MILPModel():
             
             # Add service time at first customer node
             total_time += self.data['vertices'][start]['S_i']
-            print(f"for node: {start} service time is: {self.data['vertices'][start]['S_i']}")
+            # print(f"for node: {start} service time is: {self.data['vertices'][start]['S_i']}")
 
             current = start
             while current != 0:
