@@ -16,10 +16,10 @@ class SensitivityAnalysis():
     def __init__(self):
         self.filepath = "datasheet.xlsx"
         self.ranges = {
-            'Q': np.arange[30, 40, 50, 60, 70],
-            'T_bar': np.arange[360, 420, 480, 540, 600],
-            'D_bar': np.arange(240, 265, 290, 315, 340),
-            'S_i': np.arange[]
+            'Q': [30, 40, 50, 60, 70],
+            'T_bar': [360, 420, 480, 540, 600],
+            'D_bar': [240, 265, 290, 315, 340],
+            'S_i': []
         }
 
 
