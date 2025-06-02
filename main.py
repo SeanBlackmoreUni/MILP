@@ -136,9 +136,9 @@ class MILPModel():
             self.status = 1         # Optimal
         elif self.model.Status == GRB.INFEASIBLE:
             print("Model is infeasible")
-            self.model.computeIIS()  # Compute the Irreducible Inconsistent Subsystem
-            self.model.write("infeasible_model.ilp")  # Write the IIS to a file for debugging
-            print("IIS written to infeasible_model.ilp")
+            # self.model.computeIIS()  # Compute the Irreducible Inconsistent Subsystem
+            # self.model.write("infeasible_model.ilp")  # Write the IIS to a file for debugging
+            # print("IIS written to infeasible_model.ilp")
             self.status = 2         # Infeasible
         elif self.model.Status == GRB.UNBOUNDED:
             print("Model is unbounded.")
