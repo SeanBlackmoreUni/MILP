@@ -127,6 +127,8 @@ class MILPModel():
         """
         Optimize the model
         """
+        # Set relative MIP gap tolerance (1%)
+        self.model.setParam('MIPGap', 0.01)
         self.model.optimize()
 
         if self.model.Status == GRB.OPTIMAL:
@@ -251,12 +253,12 @@ class MILPModel():
         return  self.model.ObjVal, int(self.variables['k'].X), VMT, VTT, routes
 
 if __name__ == "__main__":
-    file_path = 'datasheet.xlsx'
+    file_path = 'datasheet_kopie.xlsx'
 
     model = MILPModel()
     model.model_setup(file_path)
     model.setup_contraints()
     model.optimize_model()
 
-    if model.Status == GRB.OPTIMAL:
+    if model.model.Status == GRB.OPTIMAL:
             model.analyze_results()
