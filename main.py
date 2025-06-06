@@ -127,8 +127,8 @@ class MILPModel():
         """
         Optimize the model
         """
-        # Set relative MIP gap tolerance (1%)
-        self.model.setParam('MIPGap', 0.01)
+        # Set relative MIP gap tolerance (4%)
+        self.model.setParam('MIPGap', 0.04)
         self.model.optimize()
 
         if self.model.Status == GRB.OPTIMAL:

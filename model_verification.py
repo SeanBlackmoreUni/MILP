@@ -11,7 +11,7 @@ class ModelVerification():
     Holds the methods for verifying the model
     """
     def __init__(self):
-        filepath = "datasheet_kopie.xlsx"
+        filepath = "datasheet.xlsx"
         self.model = MILPModel()
         self.model.model_setup(filepath)
         self.model.setup_contraints()
