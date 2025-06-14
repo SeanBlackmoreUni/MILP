@@ -37,7 +37,6 @@ class SensitivityAnalysis():
         
         # Loop to optimize the model for all the values in the range
         for value in self.ranges[parameter_choice]:
-            # print(f"Bbbbbbbb: {value}")
 
             self.model = MILPModel()                                            # Initialise and set up model
             self.model.model_setup(self.filepath)
@@ -46,8 +45,6 @@ class SensitivityAnalysis():
                     vertex['S_i'] = value
             else: 
                 self.model.data['other'][parameter_choice] = value              # Override the value
-
-            # print(f"NEW VALUE: {self.model.data['other'][parameter_choice]}")
 
             self.model.setup_contraints()
             self.model.optimize_model()             # Optimize
@@ -86,7 +83,6 @@ class SensitivityAnalysis():
         # Loop to optimize the model for all the values in the range
         for value1 in self.ranges[param1]:
             for value2 in self.ranges[param2]:
-                # print(f"Bbbbbbbb: {value}")
 
                 self.model = MILPModel()                                        # Initialise and set up model
                 self.model.model_setup(self.filepath)
@@ -95,8 +91,6 @@ class SensitivityAnalysis():
                 
                 self.model.data['other'][param1] = value1              # Override the value for param1
                 self.model.data['other'][param2] = value2              # Override the value for param2
-
-                # print(f"NEW VALUE: {self.model.data['other'][parameter_choice]}")
 
                 self.model.setup_contraints()
                 self.model.optimize_model()             # Optimize
@@ -122,11 +116,12 @@ if __name__ == '__main__':
     sens_analysis = SensitivityAnalysis()
 
     # The code for the bar charts
-    # parameter_choice = ['Q', 'T_bar', 'D_bar']#, 'S_i'
-    # for param in parameter_choice:   
-    #     sens_analysis.optimize_models(param)      
+    parameter_choice = ['Q', 'T_bar', 'D_bar']#, 'S_i'
+    for param in parameter_choice:   
+        sens_analysis.optimize_models(param)      
 
     # The code for the contour plots 
-    parameter1 = 'T_bar'       # 'Q', 'T_bar', 'D_bar', 
+    parameter1 = ['T_bar', 'D_bar']       # 'Q', 'T_bar', 'D_bar', 
     parameter2 = 'Q'           # 'Q', 'T_bar', 'D_bar', 'S_i'
-    sens_analysis.cross_vary_models(parameter1, parameter2)
+    for param in parameter1:
+        sens_analysis.cross_vary_models(param, parameter2)

@@ -1,10 +1,9 @@
 """
-File for constraints
+Constraints file
+
+States the constraints.
 """
 
-"""
-File for constraints
-"""
 def add_constraints(model, data, variables):
     vertices = data["vertices"]
     arcs = data["arcs"]

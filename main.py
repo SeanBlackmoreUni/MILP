@@ -4,7 +4,6 @@ Main File
 This file holds the main flow of the model. It initialises the variables 
 for a scenario, sets the constraints, and optimizes following the structure
 of the article.
-
 """
 
 from gurobipy import Model,GRB, quicksum
@@ -73,7 +72,6 @@ class MILPModel():
         # Create decision variables
         for (i, j) in self.data['arcs']:
             # Binary variable: x[i,j] = 1 if arc (i,j) is used
-            # print(f'##############{i, j}')
             self.variables['x'][i, j] = self.model.addVar(
                 vtype=GRB.BINARY,
                 name=f"x_{i}_{j}"
@@ -127,8 +125,6 @@ class MILPModel():
         """
         Optimize the model
         """
-        # Set relative MIP gap tolerance (4%)
-        self.model.setParam('MIPGap', 0.04)
         self.model.optimize()
 
         if self.model.Status == GRB.OPTIMAL:
@@ -173,27 +169,27 @@ class MILPModel():
                 VMT += D_ij
 
         # Find the routes per vehicle
-        # # Step 1: extract active arcs
-        # arcs_used = {(i, j) for (i, j), var in self.variables['x'].items() if var.X > 0.5}
+        # Step 1: extract active arcs
+        arcs_used = {(i, j) for (i, j), var in self.variables['x'].items() if var.X > 0.5}
 
-        # # Step 2: find starting nodes from depot
-        # starts = [j for (i, j) in arcs_used if i == 0]
+        # Step 2: find starting nodes from depot
+        starts = [j for (i, j) in arcs_used if i == 0]
 
-        # routes = {}
-        # route_id = 1
+        routes = {}
+        route_id = 1
 
-        # for start in starts:
-        #     route = [0, start]
-        #     current = start
-        #     while current != 0:
-        #         next_node = next((j for (i, j) in arcs_used if i == current), 0)
-        #         if next_node == 0:
-        #             route.append(0)
-        #             break
-        #         route.append(next_node)
-        #         current = next_node
-        #     routes[route_id] = route
-        #     route_id += 1
+        for start in starts:
+            route = [0, start]
+            current = start
+            while current != 0:
+                next_node = next((j for (i, j) in arcs_used if i == current), 0)
+                if next_node == 0:
+                    route.append(0)
+                    break
+                route.append(next_node)
+                current = next_node
+            routes[route_id] = route
+            route_id += 1
 
         # Step 1: extract active arcs
         arcs_used = {(i, j) for (i, j), var in self.variables['x'].items() if var.X > 0.5}
@@ -211,7 +207,6 @@ class MILPModel():
             
             # Add service time at first customer node
             total_time += self.data['vertices'][start]['S_i']
-            # print(f"for node: {start} service time is: {self.data['vertices'][start]['S_i']}")
 
             current = start
             while current != 0:
@@ -246,9 +241,9 @@ class MILPModel():
         print(f"####   VMT: {VMT}")
         print(f"####   VTT: {VTT}")
 
-        # # Print the routes
-        # for key, value in routes.items():
-        #     print(f"####   Route {key}: {value}")
+        # Print the routes
+        for key, value in routes.items():
+            print(f"####   Route {key}: {value}")
 
         return  self.model.ObjVal, int(self.variables['k'].X), VMT, VTT, routes
 
